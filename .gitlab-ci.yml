@@ -1,0 +1,15 @@
+pages:
+  image: node:latest
+  stage: deploy
+  script:
+    - yarn install --frozen-lockfile
+    - yarn run build
+    - mv public public-vue
+    - mv dist public
+    - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\)$' -exec gzip -f -k {} \;
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - public
+  only:
+    - master
